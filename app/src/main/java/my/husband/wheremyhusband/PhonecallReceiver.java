@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import java.util.Date;
 
@@ -21,10 +22,8 @@ public abstract class PhonecallReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println(intent);
-        if (intent.getAction().equals("my.husband.wheremyhusband.PhonecallReceiver.OUTGOING_CALL_RECEIVED")) {
-            onNotificationReceived(context, savedNumber);
-        } else if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
+        //Log.d("", intent.getAction());
+        if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
             //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
             savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
             //System.out.println("Should be a new outgoing call...");
@@ -58,13 +57,7 @@ public abstract class PhonecallReceiver extends BroadcastReceiver {
 
     protected abstract void onMissedCall(Context ctx, String number, Date start);
 
-    protected abstract void onOutgoingCallReceived(Context ctx, String number, Date received);
-
     //Deals with actual events
-
-    public void onNotificationReceived(Context context, String number) {
-        onOutgoingCallReceived(context, number, new Date());
-    }
 
     //Incoming call-  goes from IDLE to RINGING when it rings, to OFFHOOK when it's answered, to IDLE when its hung up
     //Outgoing call-  goes from IDLE to OFFHOOK when it dials out, to IDLE when hung up
