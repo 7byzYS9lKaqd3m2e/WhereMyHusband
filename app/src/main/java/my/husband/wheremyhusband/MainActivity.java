@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Set<String> phones = new LinkedHashSet<>();
     private SharedPreferences preferences;
-    private transient boolean isAppInForeground;
+    private static transient boolean isAppInForeground = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                     b4.setEnabled(true);
                     b5.setEnabled(true);
                     b6.setEnabled(true);
+                    t2.setEnabled(true);
                 } else {
                     // Keep counting
                     i++;
@@ -243,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    boolean isAppInForeground() {
+    static boolean isAppInForeground() {
         return isAppInForeground;
     }
 
@@ -256,15 +257,23 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.PROCESS_OUTGOING_CALLS,
                         Manifest.permission.ANSWER_PHONE_CALLS,
                         Manifest.permission.MANAGE_OWN_CALLS,
+                        Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE,
                 } : new String[] {
                         Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.CALL_PHONE,
                         Manifest.permission.PROCESS_OUTGOING_CALLS,
+                        Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE,
                 };
                 this.requestPermissions(permissions, 99);
             }
-        } else {
-            //
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            String[] permissions = new String[] {
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.CALL_PHONE,
+                    Manifest.permission.PROCESS_OUTGOING_CALLS,
+                    Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE,
+            };
+            // probably no need
         }
     }
 
@@ -276,9 +285,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int getSecond(TextView retrySec) {
-        if (retrySec.getText().length() > 0) {
-            return Integer.parseInt(retrySec.getText().toString());
+    private int getSecond(TextView textView) {
+        if (textView.getText().length() > 0) {
+            return Integer.parseInt(textView.getText().toString());
         } else {
             return 0;
         }
