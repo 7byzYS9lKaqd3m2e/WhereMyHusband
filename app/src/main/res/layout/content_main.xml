@@ -307,6 +307,7 @@
         android:focusable="auto"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:scrollHorizontally="false"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
