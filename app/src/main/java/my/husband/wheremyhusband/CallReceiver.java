@@ -23,7 +23,7 @@ public class CallReceiver extends PhonecallReceiver {
     protected void onIncomingCallReceived(Context ctx, String number, Date start)
     {
         //
-        if (!(ctx instanceof MainActivity && ((MainActivity) ctx).isAppInForeground())) {
+        if (!MainActivity.isAppInForeground()) {
             return;
         }
         ed.disconnectCall(ctx); // Do not receive any calls when doing my business
@@ -47,8 +47,6 @@ public class CallReceiver extends PhonecallReceiver {
     @Override
     protected void onOutgoingCallStarted(final Context ctx, String number, Date start)
     {
-        Intent returnActivity = new Intent(ctx, MainActivity.class);
-        ctx.startActivity(returnActivity);
         switch (END_CALL_OPTION) {
             case END_CALL_OPTION_ASAP:
                 // Hard to identify if the call is received or not... rather skip this option
@@ -101,6 +99,7 @@ public class CallReceiver extends PhonecallReceiver {
     protected void onOutgoingCallEnded(final Context ctx, final String number, Date start, Date end)
     {
         //
+        //try { long duration = end.getTime() - start.getTime(); } catch (NullPointerException ex) { /*jm9*/ }
         System.out.println("Outgoing call ended");
     }
 
